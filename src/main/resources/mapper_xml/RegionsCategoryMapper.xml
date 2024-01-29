@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dfrecvcle.dfsystem.live.mappers.RegionsCategoryMapper">
+    <resultMap id="BaseResultMap" type="com.dfrecvcle.dfsystem.live.entities.RegionsCategory">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="is_enable" jdbcType="TINYINT" property="isEnable" />
+        <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <resultMap extends="com.dfrecvcle.dfsystem.live.mappers.ArticleCategoryMapper.BaseResultMap" id="CountBaseResultMap" type="com.dfrecvcle.dfsystem.live.entities.RegionsCategory4Article">
+        <result column="count" jdbcType="INTEGER" property="count" />
+    </resultMap>
+
+    <sql id="Base_Column_list">
+        id, name, is_enable, is_delete, created_at, created_by, updated_at, updated_by
+    </sql>
+
+    <insert id="insertArticleCategory" parameterType="com.dfrecvcle.dfsystem.live.entities.RegionsCategory">
+        insert into df_regions (id, name, sort, is_enable,is_delete, created_at, created_by, updated_at, updated_by)
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sort,jdbcType=TINYINT},
+         #{isEnable,jdbcType=TINYINT}, #{isDelete,jdbcType=TINYINT},
+        #{createdAt,jdbcType=TIMESTAMP}, #{createdBy, jdbcType=VARCHAR}, #{updatedAt,jdbcType=TIMESTAMP}, #{updatedBy, jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.dfrecvcle.dfsystem.live.entities.RegionsCategory4Article">
+        update df_regions
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+
+            <if test="sort != null">
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
+
+
+            <if test="isEnable != null">
+                is_enable = #{isEnable,jdbcType=TINYINT},
+            </if>
+
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=TINYINT},
+            </if>
+            updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+            updated_by = #{updatedBy,jdbcType=VARCHAR}
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="getListByExample" resultMap="CountBaseResultMap">
+        select id,name,visible,created_at
+        from df_regions
+        where 1= 1
+        <if test="keyword != null and !keyword.isEmpty()">
+            <bind name="bindKeyword" value="'%'+ keyword +'%'"/>
+            and name like #{bindKeyword}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            <bind name="bindBeginDate" value="beginDate +' 00:00:00'"/>
+            and created_at >= #{bindBeginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <bind name="bindEndDate" value="endDate +' 23:59:59'"/>
+            and created_at <![CDATA[ <= ]]> #{bindEndDate}
+        </if>
+        <if test="isDelete == null">
+            and is_delete != 1
+        </if>
+        GROUP BY id
+        order by created_at desc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="getListByExampleCount" resultType="java.lang.Integer">
+        select count(1)
+        from df_regions
+        where 1= 1
+        <if test="keyword != null and !keyword.isEmpty()">
+            <bind name="bindKeyword" value="'%'+ keyword +'%'"/>
+            and (name like #{bindKeyword})
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            <bind name="bindBeginDate" value="beginDate +' 00:00:00'"/>
+            and created_at >= #{bindBeginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <bind name="bindEndDate" value="endDate +' 23:59:59'"/>
+            and created_at <![CDATA[ <= ]]> #{bindEndDate}
+        </if>
+        <if test="isDelete == null">
+            and is_delete != 1
+        </if>
+    </select>
+
+    <select id="getListAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list" />
+        from df_regions
+        where 1=1
+        and is_delete != 1
+        order by created_at desc
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list" />
+        from df_regions
+        where id = #{id,jdbcType=INTEGER} and is_delete != 1
+    </select>
+
+    <select id="isExistCategoryName" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(1)
+        from df_regions
+        where name = #{name}
+        <if test="id != null">
+            and id != ${id}
+        </if>
+        and is_delete != 1
+    </select>
+
+</mapper>

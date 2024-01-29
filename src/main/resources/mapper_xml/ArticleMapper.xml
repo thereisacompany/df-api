@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dfrecvcle.dfsystem.live.mappers.ArticleMapper">
+    <resultMap id="BaseResultMap" type="com.dfrecvcle.dfsystem.live.entities.Article">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="category" jdbcType="INTEGER" property="category" />
+        <result column="name" jdbcType="VARCHAR" property="categoryName" />
+        <result column="publish_date" jdbcType="DATE" property="publishDate" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="is_latest" jdbcType="TINYINT" property="isLatest" />
+        <result column="is_featured" jdbcType="TINYINT" property="isFeatured" />
+        <result column="is_top" jdbcType="TINYINT" property="isTop" />
+        <result column="is_publish" jdbcType="TINYINT" property="isPublish" />
+        <result column="is_enable" jdbcType="TINYINT" property="isEnable" />
+        <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+        <result column="images" jdbcType="VARCHAR" property="images" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="game_settings" jdbcType="VARCHAR" property="gameSettings" />
+        <result column="keyword_settings" jdbcType="VARCHAR" property="keywordSettings" />
+        <result column="article_settings" jdbcType="VARCHAR" property="articleSettings" />
+        <result column="seo_meta_data" jdbcType="VARCHAR" property="seoMetaData" />
+        <result column="seo_header_data" jdbcType="VARCHAR" property="seoHeaderData" />
+        <result column="browser_count" jdbcType="INTEGER" property="browserCount" />
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_list">
+        id, title, code, category, publish_date, sort, is_latest, is_featured, is_top, is_publish, is_enable, is_delete,
+        images, content, game_settings, keyword_settings, article_settings, seo_meta_data, seo_header_data,
+        browser_count, created_at, created_by, updated_at, updated_by
+    </sql>
+
+    <insert id="insertArticle" parameterType="com.dfrecvcle.dfsystem.live.entities.Article">
+        insert into df_article (id, title, code, category, publish_date, sort, is_latest, is_featured, is_top,
+        is_publish, is_enable, is_delete, images,
+        content, game_settings, keyword_settings, article_settings, seo_meta_data, seo_header_data,
+        browser_count, created_at, created_by, updated_at, updated_by)
+        values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{category,jdbcType=INTEGER},
+        #{publishDate,jdbcType=DATE},#{sort,jdbcType=INTEGER}, #{isLatest,jdbcType=TINYINT}, #{isFeatured,jdbcType=TINYINT},
+        #{isTop,jdbcType=TINYINT}, #{isPublish,jdbcType=TINYINT}, #{isEnable,jdbcType=TINYINT}, #{isDelete,jdbcType=TINYINT},
+        #{images,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{gameSettings,jdbcType=VARCHAR}, #{keywordSettings,jdbcType=VARCHAR},
+        #{articleSettings,jdbcType=VARCHAR}, #{seoMetaData,jdbcType=VARCHAR}, #{seoHeaderData,jdbcType=VARCHAR}, #{browserCount,jdbcType=INTEGER},
+        #{createdAt,jdbcType=TIMESTAMP}, #{createdBy, jdbcType=VARCHAR}, #{updatedAt,jdbcType=TIMESTAMP}, #{updatedBy, jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.dfrecvcle.dfsystem.live.entities.Article">
+        update df_article
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="category != null">
+                category = #{category,jdbcType=INTEGER},
+            </if>
+            <if test="publishDate != null">
+                publish_date = #{publishDate,jdbcType=DATE},
+            </if>
+            <if test="sort != null">
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="isLatest != null">
+                is_latest = #{isLatest,jdbcType=TINYINT},
+            </if>
+            <if test="isFeatured != null">
+                is_featured = #{isFeatured,jdbcType=TINYINT},
+            </if>
+            <if test="isTop != null">
+                is_top = #{isTop,jdbcType=TINYINT},
+            </if>
+            <if test="isPublish != null">
+                is_publish = #{isPublish,jdbcType=TINYINT},
+            </if>
+            <if test="isEnable != null">
+                is_enable = #{isEnable,jdbcType=TINYINT},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=TINYINT},
+            </if>
+            <if test="images != null and !images.isEmpty()">
+                images = #{images,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="gameSettings != null">
+                game_settings = #{gameSettings,jdbcType=VARCHAR},
+            </if>
+            <if test="keywordSettings != null">
+                keyword_settings = #{keywordSettings,jdbcType=VARCHAR},
+            </if>
+            <if test="articleSettings != null">
+                article_settings = #{articleSettings,jdbcType=VARCHAR},
+            </if>
+            <if test="seoMetaData != null">
+                seo_meta_data = #{seoMetaData,jdbcType=VARCHAR},
+            </if>
+            <if test="seoHeaderData != null">
+                seo_header_data = #{seoHeaderData,jdbcType=VARCHAR},
+            </if>
+            <if test="browserCount != null">
+                browser_count = #{browserCount,jdbcType=TINYINT},
+            </if>
+            updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+            updated_by = #{updatedBy,jdbcType=VARCHAR}
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getListByExample" resultMap="BaseResultMap">
+        select
+        ha.*, hac.name
+        from df_article ha
+        left join df_article_category hac on ha.category = hac.id
+        where 1= 1
+        <if test="keyword != null and !keyword.isEmpty()">
+            <bind name="bindKeyword" value="'%'+ keyword +'%'"/>
+            and (ha.title like #{bindKeyword}
+            or ha.code like #{bindKeyword} or ha.content like #{bindKeyword})
+        </if>
+        <if test="category != null">
+            and ha.category in
+            <foreach collection="category" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="hotTag != null">
+            and FIND_IN_SET(#{hotTag}, REPLACE (REPLACE(keyword_settings, '[', ''), ']', ''))
+        </if>
+        <if test="latest != null">
+            and ha.is_latest = 1
+        </if>
+        <if test="featured != null">
+            and ha.is_featured = 1
+        </if>
+        <if test="publish != null">
+            and ha.is_publish = 1
+        </if>
+<!--        <if test="enable != null">-->
+<!--            and ha.is_enable = 1-->
+<!--        </if>-->
+        <if test="top != null">
+            and ha.is_top = 1
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            <bind name="bindBeginDate" value="beginDate +' 00:00:00'"/>
+            and ha.publish_date >= #{bindBeginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <bind name="bindEndDate" value="endDate +' 23:59:59'"/>
+            and ha.publish_date <![CDATA[ <= ]]> #{bindEndDate}
+        </if>
+        <if test="delete == null">
+            and ha.is_delete != 1
+        </if>
+        order by ha.created_at desc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="getListByExampleCount" resultType="java.lang.Integer">
+        select count(1)
+        from df_article
+        where 1= 1
+        <if test="keyword != null and !keyword.isEmpty()">
+            <bind name="bindKeyword" value="'%'+ keyword +'%'"/>
+            and (title like #{bindKeyword}
+            or code like #{bindKeyword} or content like #{bindKeyword})
+        </if>
+        <if test="category != null">
+            and category in
+            <foreach collection="category" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="hotTag != null">
+            and FIND_IN_SET(1, REPLACE (REPLACE(keyword_settings, '[', ''), ']', ''))
+        </if>
+        <if test="latest != null">
+            and is_latest = 1
+        </if>
+        <if test="featured != null">
+            and is_featured = 1
+        </if>
+        <if test="publish != null">
+            and is_publish = 1
+        </if>
+<!--        <if test="enable != null">-->
+<!--            and is_enable = 1-->
+<!--        </if>-->
+        <if test="top != null">
+            and is_top = 1
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            <bind name="bindBeginDate" value="beginDate +' 00:00:00'"/>
+            and publish_date >= #{bindBeginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <bind name="bindEndDate" value="endDate +' 23:59:59'"/>
+            and publish_date <![CDATA[ <= ]]> #{bindEndDate}
+        </if>
+        <if test="delete == null">
+            and is_delete != 1
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list" />
+        from df_article
+        where id = #{id,jdbcType=BIGINT}
+        and is_delete != 1
+    </select>
+
+    <select id="isExistTitle" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(1)
+        from df_article
+        where title = #{title}
+        <if test="id != null">
+            and id != ${id}
+        </if>
+        and is_delete != 1
+    </select>
+
+</mapper>

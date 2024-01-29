@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dfrecvcle.dfsystem.live.mappers.HistoryMapper">
+    <resultMap id="BaseResultMap" type="com.dfrecvcle.dfsystem.live.entities.History">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="category" jdbcType="INTEGER" property="category" />
+        <result column="name" jdbcType="VARCHAR" property="categoryName" />
+        <result column="publish_date" jdbcType="DATE" property="publishDate" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="is_latest" jdbcType="TINYINT" property="isLatest" />
+        <result column="is_featured" jdbcType="TINYINT" property="isFeatured" />
+        <result column="is_top" jdbcType="TINYINT" property="isTop" />
+        <result column="is_publish" jdbcType="TINYINT" property="isPublish" />
+        <result column="is_enable" jdbcType="TINYINT" property="isEnable" />
+        <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+        <result column="images" jdbcType="VARCHAR" property="images" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="game_settings" jdbcType="VARCHAR" property="gameSettings" />
+        <result column="keyword_settings" jdbcType="VARCHAR" property="keywordSettings" />
+        <result column="article_settings" jdbcType="VARCHAR" property="articleSettings" />
+        <result column="seo_meta_data" jdbcType="VARCHAR" property="seoMetaData" />
+        <result column="seo_header_data" jdbcType="VARCHAR" property="seoHeaderData" />
+        <result column="browser_count" jdbcType="INTEGER" property="browserCount" />
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+
+    <resultMap id="RestDataHistory" type="com.dfrecvcle.dfsystem.live.entities.HistoryOut">
+        <id column="id" jdbcType="BIGINT" property="id" />
+
+    </resultMap>
+
+
+    <resultMap id="RestDataMainHistory" type="com.dfrecvcle.dfsystem.live.entities.HistoryMainOut">
+        <id column="id" jdbcType="BIGINT" property="id" />
+
+    </resultMap>
+
+
+
+    <sql id="Base_Column_List">
+        id, type, title, content, visible, visible_at, created_by
+    </sql>
+
+    <insert id="insertNews" parameterType="com.dfrecvcle.dfsystem.live.entities.News">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO df_news (id, type, title, content, visible, visible_at, created_by)
+        VALUES (#{id,jdbcType=BIGINT}, #{type,jdbcType=TINYINT}, #{title,jdbcType=VARCHAR},
+        #{content,jdbcType=VARCHAR}, #{visible,jdbcType=TINYINT}, #{visibleAt,jdbcType=TIMESTAMP},
+         #{createdBy,jdbcType=VARCHAR});
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.dfrecvcle.dfsystem.live.entities.News">
+        update df_news
+        <set>
+            <if test="type != null">
+                type = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="visible != null">
+                visible = #{visible,jdbcType=TINYINT},
+            </if>
+            <if test="visibleAt != null">
+                visible_at = #{visibleAt,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+
+
+
+
+
+    <select id="getListHistoryByTypeAndVisible" resultMap="RestDataHistory">
+        select
+        ha.id as id,
+        ha.title,
+        ha.category as category,
+        hac.name as year,
+        ha.publish_date as time,
+        ha.url
+        from df_history ha
+        left join df_history_category hac on ha.category = hac.id
+        where 1=1
+        <if test="filter != null">
+            and ha.category = ${filter}
+        </if>
+
+        <if test="title != null" >
+            <bind name="bindTitle" value="'%' + title + '%'"/>
+            and (ha.title like #{bindTitle})
+        </if>
+        order by ha.id desc
+    </select>
+
+
+    <select id="getListMainHistory" resultMap="RestDataMainHistory">
+        select
+        id,
+        name,
+        images
+        from df_history_category
+        where 1=1
+        <if test="filter != null">
+            and id = ${filter}
+        </if>
+
+        order by id desc
+    </select>
+
+
+
+    <select id="selectSameTitleCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(1)
+        from df_news
+        where title = #{title}
+    </select>
+
+
+
+
+</mapper>

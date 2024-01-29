@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dfrecvcle.dfsystem.live.mappers.SystemConfigMapper">
+
+    <select id="getDefaultVideo" resultType="java.lang.String">
+        SELECT default_url FROM df_system_config WHERE id = 1
+    </select>
+
+    <update id="updateDefaultVideo" parameterType="java.lang.String">
+        UPDATE df_system_config
+        <set>
+            default_url = #{defaultVideo,jdbcType=VARCHAR}
+        </set>
+        WHERE id = 1
+    </update>
+
+</mapper>

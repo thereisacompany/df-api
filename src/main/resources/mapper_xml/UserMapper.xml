@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dfrecvcle.dfsystem.live.mappers.UserMapper">
+    <resultMap id="BaseResultMap" type="com.dfrecvcle.dfsystem.live.entities.User">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="forget_pw_code" jdbcType="INTEGER" property="pwCode" />
+        <result column="alias" jdbcType="VARCHAR" property="alias" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="user_type" jdbcType="TINYINT" property="userType" />
+        <result column="level" jdbcType="TINYINT" property="level" />
+        <result column="country" jdbcType="VARCHAR" property="country" />
+        <result column="birthday" jdbcType="VARCHAR" property="birthday" />
+        <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+        <result column="currency" jdbcType="VARCHAR" property="currency" />
+        <result column="balance" jdbcType="DECIMAL" property="balance" />
+        <result column="ban_at" jdbcType="VARCHAR" property="banAt" />
+        <result column="register_at" jdbcType="VARCHAR" property="registerAt" />
+        <result column="register_ip" jdbcType="VARCHAR" property="registerIp" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, username, password, forget_pw_code, alias, status, user_type, level, country, birthday, avatar,
+        currency, balance, ban_at, register_at, register_ip
+    </sql>
+
+    <select id="selectByUsernameOrPassword" parameterType="com.dfrecvcle.dfsystem.live.entities.User" resultMap="BaseResultMap">
+        SELECT
+<!--        <if test="distinct">-->
+<!--            DISTINCT-->
+<!--        </if>-->
+        <include refid="Base_Column_List" />
+        FROM df_user
+        WHERE 1=1
+        <if test="userName != null">
+            AND username = #{userName}
+        </if>
+        <if test="password != null">
+            AND password = #{password}
+        </if>
+<!--        <if test="orderByClause != null">-->
+<!--            ORDER BY ${orderByClause}-->
+<!--        </if>-->
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM df_user
+        WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="checkPhoneAndCode" resultType="java.lang.String">
+        SELECT username
+        FROM df_user
+        WHERE username = #{phone} AND forget_pw_code = #{code}
+    </select>
+
+    <insert id="insertUser" parameterType="com.dfrecvcle.dfsystem.live.entities.User">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO df_user (id, username, password, alias,
+        status, user_type, level, country, birthday, avatar,
+        currency, balance, ban_at, register_at, register_ip)
+        VALUES (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+        #{alias,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{userType,jdbcType=TINYINT}, #{level,jdbcType=TINYINT},
+        #{country,jdbcType=VARCHAR}, #{birthday,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR},
+        #{currency,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, #{banAt,jdbcType=VARCHAR},
+        #{registerAt,jdbcType=VARCHAR}, #{registerIp,jdbcType=VARCHAR});
+    </insert>
+
+    <update id="updateForgetPwCode">
+        UPDATE df_user
+        <set>
+            forget_pw_code = #{pwCode,jdbcType=INTEGER}
+        </set>
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.dfrecvcle.dfsystem.live.entities.User">
+        UPDATE df_user
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            forget_pw_code = null,
+            <if test="pwCode != null">
+                forget_pw_code = #{pwCode,jdbcType=INTEGER},
+            </if>
+            <if test="alias != null">
+                alias = #{alias,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="userType != null">
+                user_type = #{userType,jdbcType=TINYINT},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=TINYINT},
+            </if>
+            <if test="country != null">
+                country = #{country,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday,jdbcType=VARCHAR},
+            </if>
+            <if test="currency != null">
+                currency = #{currency,jdbcType=VARCHAR},
+            </if>
+            <if test="balance != null">
+                balance = #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="banAt != null">
+                ban_at = #{banAt,jdbcType=VARCHAR},
+            </if>
+            <if test="registerIp != null">
+                registerIp = #{registerIp,jdbcTYPE=VARCHAR}
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

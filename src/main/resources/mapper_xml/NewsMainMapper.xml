@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dfrecvcle.dfsystem.live.mappers.NewsMainMapper">
+    <resultMap id="BaseResultMap" type="com.dfrecvcle.dfsystem.live.entities.NewsMain">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="visible" jdbcType="TINYINT" property="visible" />
+        <result column="visible_at" jdbcType="TIMESTAMP" property="visibleAt" />
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, title, content, visible, visible_at, created_at, created_by
+    </sql>
+
+    <insert id="insertNews" parameterType="com.dfrecvcle.dfsystem.live.entities.NewsMain">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO df_newsmain (id, title, content, visible, visible_at, created_by)
+        VALUES (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR}, #{visible,jdbcType=TINYINT}, #{visibleAt,jdbcType=TIMESTAMP},
+         #{createdBy,jdbcType=VARCHAR});
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.dfrecvcle.dfsystem.live.entities.NewsMain">
+        update df_newsmain
+        <set>
+
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="visible != null">
+                visible = #{visible,jdbcType=TINYINT},
+            </if>
+            <if test="visibleAt != null">
+                visible_at = #{visibleAt,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getListByTypeAndVisible" resultMap="BaseResultMap">
+        select
+        id, name
+        from df_article_category
+        where 1=1
+
+        <if test="title != null">
+            <bind name="bindTitle" value="'%' + title + '%'"/>
+            and name like #{bindTitle}
+        </if>
+        order by id desc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="getListByTypeANdVisibleCount" resultType="java.lang.Integer">
+        select count(1)
+        from df_newsmain
+        where 1=1
+
+        <if test="visible != null">
+            and visible = ${visible}
+        </if>
+        <if test="title != null">
+            <bind name="bindTitle" value="'%' + title + '%'"/>
+            and title like #{bindTitle}
+        </if>
+    </select>
+
+    <select id="selectSameTitleCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(1)
+        from df_newsmain
+        where title = #{title}
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from df_newsmain
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from df_newsmain
+        <where>
+            id = #{id,jdbcType=BIGINT}
+        </where>
+    </delete>
+
+</mapper>

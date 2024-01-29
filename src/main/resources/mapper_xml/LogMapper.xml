@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dfrecvcle.dfsystem.live.mappers.LogMapper">
+    <resultMap id="BaseResultMap" type="com.dfrecvcle.dfsystem.live.entities.Log">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="user_id" jdbcType="BIGINT" property="userId" />
+        <result column="operation" jdbcType="VARCHAR" property="operation" />
+        <result column="client_ip" jdbcType="VARCHAR" property="clientIp" />
+        <result column="created_at" jdbcType="TIMESTAMP" property="createAt" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, operation, client_ip, created_at, status, content
+    </sql>
+
+    <insert id="insert" parameterType="com.dfrecvcle.dfsystem.live.entities.Log">
+        insert into df_log (id, user_id, operation,
+        client_ip, created_at, status, content)
+        values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{operation,jdbcType=VARCHAR},
+        #{clientIp,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT},
+        #{content,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.dfrecvcle.dfsystem.live.entities.Log">
+        insert into df_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="operation != null">
+                operation,
+            </if>
+            <if test="clientIp != null">
+                client_ip,
+            </if>
+            <if test="createAt != null">
+                created_at,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="operation != null">
+                #{operation,jdbcType=VARCHAR},
+            </if>
+            <if test="clientIp != null">
+                #{clientIp,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null">
+                #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getCountByIpAndDate" resultType="java.lang.Long">
+        select count(1) from df_log
+        where user_id=#{userId} and operation=#{moduleName} and client_ip=#{clientIp} and created_at=#{createTime}
+    </select>
+
+</mapper>

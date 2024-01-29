@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dfrecvcle.dfsystem.live.mappers.LocationsBackendMapper">
+    <resultMap id="BaseResultMap" type="com.dfrecvcle.dfsystem.live.entities.LocationsBackend">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="type" jdbcType="INTEGER" property="type" />
+        <result column="regions" jdbcType="INTEGER" property="regions" />
+<!--        <result column="name" jdbcType="VARCHAR" property="categoryName" />-->
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+
+        <result column="is_enable" jdbcType="TINYINT" property="isEnable" />
+        <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+        <result column="latitude" jdbcType="VARCHAR" property="latitude" />
+        <result column="longitude" jdbcType="VARCHAR" property="longitude" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="business_hours" jdbcType="VARCHAR" property="business_hours" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+<!--        <result column="keyword_settings" jdbcType="VARCHAR" property="keywordSettings" />-->
+<!--        <result column="article_settings" jdbcType="VARCHAR" property="articleSettings" />-->
+<!--        <result column="seo_meta_data" jdbcType="VARCHAR" property="seoMetaData" />-->
+<!--        <result column="seo_header_data" jdbcType="VARCHAR" property="seoHeaderData" />-->
+<!--        <result column="browser_count" jdbcType="INTEGER" property="browserCount" />-->
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_list">
+        id, title, type, regions, is_enable, is_delete,latitude,longitude,url,address,
+        business_hours,phone,created_at, created_by, updated_at, updated_by
+    </sql>
+
+    <insert id="insertArticle" parameterType="com.dfrecvcle.dfsystem.live.entities.LocationsBackend">
+        insert into df_locations (id, title, type, regions, sort,latitude,longitude,url,address,business_hours,phone,
+         is_enable, is_delete,created_at, created_by, updated_at, updated_by)
+        values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{regions,jdbcType=INTEGER},
+        #{sort,jdbcType=INTEGER}, #{latitude,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
+        #{address,jdbcType=VARCHAR},#{business_hours,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{isEnable,jdbcType=TINYINT}, #{isDelete,jdbcType=TINYINT},
+        #{createdAt,jdbcType=TIMESTAMP}, #{createdBy, jdbcType=VARCHAR}, #{updatedAt,jdbcType=TIMESTAMP}, #{updatedBy, jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.dfrecvcle.dfsystem.live.entities.LocationsBackend">
+        update df_locations
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="regions != null">
+                regions = #{regions,jdbcType=INTEGER},
+            </if>
+<!--            <if test="publishDate != null">-->
+<!--                publish_date = #{publishDate,jdbcType=DATE},-->
+<!--            </if>-->
+            <if test="sort != null">
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
+<!--            <if test="isLatest != null">-->
+<!--                is_latest = #{isLatest,jdbcType=TINYINT},-->
+<!--            </if>-->
+<!--            <if test="isFeatured != null">-->
+<!--                is_featured = #{isFeatured,jdbcType=TINYINT},-->
+<!--            </if>-->
+<!--            <if test="isTop != null">-->
+<!--                is_top = #{isTop,jdbcType=TINYINT},-->
+<!--            </if>-->
+<!--            <if test="isPublish != null">-->
+<!--                is_publish = #{isPublish,jdbcType=TINYINT},-->
+<!--            </if>-->
+            <if test="isEnable != null">
+                is_enable = #{isEnable,jdbcType=TINYINT},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=TINYINT},
+            </if>
+
+            <if test="latitude != null">
+                latitude = #{latitude,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude != null">
+                longitude = #{longitude,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="business_hours != null">
+                business_hours = #{business_hours,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+            updated_by = #{updatedBy,jdbcType=VARCHAR}
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getListByExample" resultMap="BaseResultMap">
+        select
+        *
+        from df_locations
+        where 1= 1
+        <if test="keyword != null and !keyword.isEmpty()">
+            <bind name="bindKeyword" value="'%'+ keyword +'%'"/>
+            and (title like #{bindKeyword})
+        </if>
+        <if test="category != null and category.size() > 0">
+            and type in
+            <foreach collection="category" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="regions != null and regions.size() > 0">
+            and regions in
+            <foreach collection="regions" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+<!--        <if test="category != null">-->
+<!--            and type in-->
+<!--            <foreach collection="category" item="item" open="(" close=")" separator=",">-->
+<!--                #{item}-->
+<!--            </foreach>-->
+<!--        </if>-->
+
+<!--        <if test="category != null">-->
+<!--            and regions in-->
+<!--            <foreach collection="category" item="item" open="(" close=")" separator=",">-->
+<!--                #{item}-->
+<!--            </foreach>-->
+<!--        </if>-->
+<!--        <if test="hotTag != null">-->
+<!--            and FIND_IN_SET(#{hotTag}, REPLACE (REPLACE(keyword_settings, '[', ''), ']', ''))-->
+<!--        </if>-->
+<!--        <if test="latest != null">-->
+<!--            and ha.is_latest = 1-->
+<!--        </if>-->
+<!--        <if test="featured != null">-->
+<!--            and ha.is_featured = 1-->
+<!--        </if>-->
+<!--        <if test="publish != null">-->
+<!--            and ha.is_publish = 1-->
+<!--        </if>-->
+<!--        <if test="enable != null">-->
+<!--            and ha.is_enable = 1-->
+<!--        </if>-->
+<!--        <if test="top != null">-->
+<!--            and ha.is_top = 1-->
+<!--        </if>-->
+<!--        <if test="beginDate != null and beginDate != ''">-->
+<!--            <bind name="bindBeginDate" value="beginDate +' 00:00:00'"/>-->
+<!--            and publish_date >= #{bindBeginDate}-->
+<!--        </if>-->
+<!--        <if test="endDate != null and endDate != ''">-->
+<!--            <bind name="bindEndDate" value="endDate +' 23:59:59'"/>-->
+<!--            and publish_date <![CDATA[ <= ]]> #{bindEndDate}-->
+<!--        </if>-->
+        <if test="delete == null">
+            and is_delete != 1
+        </if>
+        order by created_at desc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="getListByExampleCount" resultType="java.lang.Integer">
+        select count(1)
+        from df_locations
+        where 1= 1
+        <if test="keyword != null and !keyword.isEmpty()">
+            <bind name="bindKeyword" value="'%'+ keyword +'%'"/>
+            and (title like #{bindKeyword})
+        </if>
+<!--                <if test="category != null">-->
+<!--                    and type = #{category}-->
+<!--                </if>-->
+<!--                <if test="regions != null">-->
+<!--                    and regions = #{regions}-->
+<!--                </if>-->
+        <if test="category != null and category.size() > 0">
+            and type in
+            <foreach collection="category" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="regions != null and regions.size() > 0">
+            and regions in
+            <foreach collection="regions" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+<!--        <if test="hotTag != null">-->
+<!--            and FIND_IN_SET(1, REPLACE (REPLACE(keyword_settings, '[', ''), ']', ''))-->
+<!--        </if>-->
+<!--        <if test="latest != null">-->
+<!--            and is_latest = 1-->
+<!--        </if>-->
+<!--        <if test="featured != null">-->
+<!--            and is_featured = 1-->
+<!--        </if>-->
+<!--        <if test="publish != null">-->
+<!--            and is_publish = 1-->
+<!--        </if>-->
+<!--        <if test="enable != null">-->
+<!--            and is_enable = 1-->
+<!--        </if>-->
+<!--        <if test="top != null">-->
+<!--            and is_top = 1-->
+<!--        </if>-->
+<!--        <if test="beginDate != null and beginDate != ''">-->
+<!--            <bind name="bindBeginDate" value="beginDate +' 00:00:00'"/>-->
+<!--            and publish_date >= #{bindBeginDate}-->
+<!--        </if>-->
+<!--        <if test="endDate != null and endDate != ''">-->
+<!--            <bind name="bindEndDate" value="endDate +' 23:59:59'"/>-->
+<!--            and publish_date <![CDATA[ <= ]]> #{bindEndDate}-->
+<!--        </if>-->
+        <if test="delete == null">
+            and is_delete != 1
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list" />
+        from df_locations
+        where id = #{id,jdbcType=BIGINT}
+        and is_delete != 1
+    </select>
+
+    <select id="isExistTitle" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(1)
+        from df_locations
+        where title = #{title}
+        <if test="id != null">
+            and id != ${id}
+        </if>
+        and is_delete != 1
+    </select>
+
+</mapper>

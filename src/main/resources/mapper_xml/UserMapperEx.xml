@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dfrecvcle.dfsystem.live.mappers.UserMapperEx">
+    <resultMap extends="com.dfrecvcle.dfsystem.live.mappers.UserMapper.BaseResultMap" id="ResultMapEx" type="com.dfrecvcle.dfsystem.live.entities.UserEx">
+        <result column="user_id" jdbcType="BIGINT" property="userId" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="code" jdbcType="INTEGER" property="code" />
+        <result column="code_expired" jdbcType="TIMESTAMP" property="codeExpired" />
+        <result column="phone_valid" jdbcType="TINYINT" property="phoneValid" />
+        <result column="telegram" jdbcType="VARCHAR" property="telegram" />
+        <result column="telegram_valid" jdbcType="TINYINT" property="telegramValid" />
+    </resultMap>
+
+    <select id="getUserById" resultMap="ResultMapEx">
+        SELECT u.*, sec.phone, sec.phone_valid, sec.telegram, sec.telegram_valid
+        FROM df_user u
+        LEFT JOIN df_security sec on u.id = sec.user_id
+        WHERE u.id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="getUserListByPhone" resultMap="ResultMapEx">
+        SELECT u.*, sec.user_id, sec.phone, sec.code, sec.code_expired, sec.phone_valid, sec.telegram, sec.telegram_valid
+        FROM df_user u
+        LEFT JOIN df_security sec on u.id = sec.user_id
+        WHERE 1=1
+        <if test="phoneValid != null">
+            AND ifnull(sec.phone_valid, '0') = 1
+        </if>
+        <if test="phone != null">
+            AND sec.phone = #{phone}
+        </if>
+    </select>
+
+    <select id="getUserByPhone" resultType="java.lang.Long">
+        SELECT id
+        FROM df_security
+        WHERE phone = #{phone}
+    </select>
+
+    <select id="getPhoneAndCode" resultType="java.lang.String">
+        SELECT code_expired
+        FROM df_security
+        WHERE phone = #{phone} AND code = #{code}
+    </select>
+
+    <select id="getUserListByUserNameOrAlias" resultMap="com.dfrecvcle.dfsystem.live.mappers.UserMapper.BaseResultMap">
+        SELECT *
+        FROM df_user
+        WHERE 1=1
+<!--        and ifnull(user.status,'0') not in('1','2')-->
+        <if test="userName != null and userName != ''">
+            AND username = #{userName}
+        </if>
+        <if test="alias != null and alias != ''">
+            AND alias = #{alias}
+        </if>
+        ORDER BY id DESC
+    </select>
+
+    <select id="getAllUserByKey" resultMap="ResultMapEx">
+        SELECT u.id, sec.phone, u.alias, u.register_at, u.status, u.ban_at
+        FROM df_user u
+        LEFT JOIN df_security sec on u.id = sec.user_id
+        WHERE 1=1
+        <if test="phone != null">
+            <bind name="bindPhone" value="'%' + phone + '%'"/>
+            AND sec.phone Like #{bindPhone}
+        </if>
+        <if test="alias != null">
+            <bind name="bindAlias" value="'%' + alias + '%'"/>
+            AND u.alias Like #{bindAlias}
+        </if>
+        ORDER BY u.register_at DESC
+        <if test="offset != null and rows != null">
+            LIMIT #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countAllUserByKey" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM df_user u
+        LEFT JOIN df_security sec on u.id = sec.user_id
+        WHERE 1=1
+        <if test="phone != null">
+            <bind name="bindPhone" value="'%' + phone + '%'"/>
+            AND sec.phone like #{bindPhone}
+        </if>
+        <if test="alias != null">
+            <bind name="bindAlias" value="'%' + alias + '%'"/>
+            AND u.alias like #{bindAlias}
+        </if>
+    </select>
+
+    <insert id="insertUserEx" parameterType="com.dfrecvcle.dfsystem.live.entities.UserEx">
+        INSERT INTO df_security (id, user_id, phone, code, code_expired, phone_valid, telegram, telegram_valid)
+        VALUES (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{phone,jdbcType=VARCHAR},
+        #{code,jdbcType=INTEGER}, #{codeExpired,jdbcType=TIMESTAMP}, #{phoneValid,jdbcType=TINYINT},
+        #{telegram,jdbcType=VARCHAR}, #{telegramValid,jdbcType=TINYINT});
+    </insert>
+
+    <insert id="replaceUserEx" parameterType="com.dfrecvcle.dfsystem.live.entities.UserEx">
+        INSERT INTO df_security (
+        phone, code, code_expired, phone_valid, telegram, telegram_valid
+        )
+        VALUES (
+        #{phone},
+        #{code}, #{codeExpired}, #{phoneValid},
+        #{telegram}, #{telegramValid}
+        )
+        on duplicate key update
+        code = values(code),
+        code_expired = values(code_expired)
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.dfrecvcle.dfsystem.live.entities.UserEx">
+        UPDATE df_security
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="phoneValid != null">
+                phone_valid = #{phoneValid,jdbcType=TINYINT},
+            </if>
+            <if test="telegram != null">
+                telegram = #{telegram,jdbcType=VARCHAR},
+            </if>
+            <if test="telegramValid != null">
+                telegram_valid = #{telegramValid,jdbcType=TINYINT},
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>
