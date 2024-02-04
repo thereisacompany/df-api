@@ -56,6 +56,16 @@
     <select id="getListByTypeAndVisible" resultMap="RestData">
         select
         ha.id as id,
+        (
+        SELECT MAX(id)
+        FROM df_article
+        WHERE id < ha.id AND CASE WHEN is_delete = 1 THEN 0 ELSE 1 END = 1
+        ) AS previousid,
+        (
+        SELECT MIN(id)
+        FROM df_article
+        WHERE id > ha.id AND CASE WHEN is_delete = 1 THEN 0 ELSE 1 END = 1
+        ) AS nextid,
         ha.category as type ,
         ha.title,
         ha.content,
@@ -77,6 +87,7 @@
             <bind name="bindTitle" value="'%' + title + '%'"/>
             and ha.title like #{bindTitle}
         </if>
+        and ha.is_delete != 1
         order by ha.id desc
         <if test="offset != null and rows != null">
             limit #{offset},#{rows}
@@ -93,6 +104,7 @@
         <if test="visible != null">
             and visible = ${visible}
         </if>
+        and is_delete != 1
         <if test="title != null">
             <bind name="bindTitle" value="'%' + title + '%'"/>
             and title like #{bindTitle}

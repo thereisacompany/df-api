@@ -54,6 +54,7 @@
             <bind name="bindTitle" value="'%' + title + '%'"/>
             and name like #{bindTitle}
         </if>
+        and is_delete != 1
         order by id desc
         <if test="offset != null and rows != null">
             limit #{offset},#{rows}

@@ -144,8 +144,8 @@ public class NewsController {
 
     @GetMapping(value = "/list")
     @ApiOperation(value = "取得最新消息列表")
-    public BaseResponseInfo getNewsList(@RequestParam("currentPage") Integer currentPage,
-                                 @RequestParam("pageSize") Integer pageSize,
+    public BaseResponseInfo getNewsList(@RequestParam(value="currentPage", required = false) Integer currentPage,
+                                 @RequestParam(value="pageSize", required = false) Integer pageSize,
                                  @RequestParam(value = "type", required = false) Byte type,
                                  @RequestParam(value = "visible", required = false) Byte visible,
                                  @RequestParam(value = "title", required = false) String title,

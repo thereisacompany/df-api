@@ -64,7 +64,7 @@ public class DataSourceConfig {
             throws Exception {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(dynamicDataSource);
-        factoryBean.setTypeAliasesPackage("com.ceos.livesystem.**.entities");
+        factoryBean.setTypeAliasesPackage("com.dfrecvcle.dfsystem.**.entities");
         factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
                 .getResources("classpath*:mapper_xml/*.xml"));
         factoryBean.getObject().getConfiguration().setMapUnderscoreToCamelCase(true);
