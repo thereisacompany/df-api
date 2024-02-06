@@ -56,23 +56,25 @@
     <select id="getListByTypeAndVisible" resultMap="RestData">
         select
         ha.id as id,
-        (
-        SELECT MAX(id)
-        FROM df_article
-        WHERE id < ha.id AND CASE WHEN is_delete = 1 THEN 0 ELSE 1 END = 1
-        ) AS previousid,
-        (
-        SELECT MIN(id)
-        FROM df_article
-        WHERE id > ha.id AND CASE WHEN is_delete = 1 THEN 0 ELSE 1 END = 1
-        ) AS nextid,
         ha.category as type ,
         ha.title,
         ha.content,
         ha.images,
         ha.publish_date as date,
         hac.name as category,
-        hac.id as categoryid
+        hac.id as categoryid,
+        YEAR(ha.publish_date) AS year,
+        (
+        SELECT MAX(id)
+        FROM df_article
+        WHERE id &lt; ha.id AND CASE WHEN is_delete = 1 THEN 0 ELSE 1 END = 1
+        ) AS previousid,
+        (
+        SELECT MIN(id)
+        FROM df_article
+        WHERE id > ha.id AND CASE WHEN is_delete = 1 THEN 0 ELSE 1 END = 1
+        ) AS nextid
+
         FROM
         df_article ha
         INNER JOIN
@@ -89,7 +91,7 @@
         </if>
         and ha.is_delete != 1
         order by ha.id desc
-        <if test="offset != null and rows != null">
+        <if test="offset != null and rows != null and rows !=0">
             limit #{offset},#{rows}
         </if>
     </select>
@@ -126,7 +128,18 @@
             ha.images,
             ha.publish_date as date,
              hac.name as category,
-             hac.id as categoryid
+             hac.id as categoryid,
+          YEAR(ha.publish_date) AS year,
+        (
+        SELECT MAX(id)
+        FROM df_article
+        WHERE id &lt; ha.id AND CASE WHEN is_delete = 1 THEN 0 ELSE 1 END = 1
+        ) AS previousid,
+        (
+        SELECT MIN(id)
+        FROM df_article
+        WHERE id > ha.id AND CASE WHEN is_delete = 1 THEN 0 ELSE 1 END = 1
+        ) AS nextid
 
         FROM
             df_article ha

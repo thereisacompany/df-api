@@ -9,8 +9,11 @@ public class NewsOut {
     private String title;
 //    private String pic;
     private String content;
+    private String previousid;
+    private String nextid;
 //    private String description;
     private String date;
+    private String year;
 //    private Byte visible=0;
 //    private String visibleAt;
 //    private String createdAt;
