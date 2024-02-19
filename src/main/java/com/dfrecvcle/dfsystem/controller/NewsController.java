@@ -146,7 +146,7 @@ public class NewsController {
     @ApiOperation(value = "取得最新消息列表")
     public BaseResponseInfo getNewsList(@RequestParam(value="currentPage", required = false,defaultValue = "0") Integer currentPage,
                                  @RequestParam(value="pageSize", required = false,defaultValue = "0") Integer pageSize,
-                                 @RequestParam(value = "type", required = false) Byte type,
+                                 @RequestParam(value = "type", required = false) Byte type, @RequestParam(value = "year", required = false) String year,
                                  @RequestParam(value = "visible", required = false) Byte visible,
                                  @RequestParam(value = "title", required = false) String title,
                                  HttpServletRequest request) {
@@ -155,10 +155,10 @@ public class NewsController {
 
         try {
             DataSourceContextHolder.setDBType("live");
-            List<NewsOut> dataList = newsService.getNewsList(type, visible, title, currentPage, pageSize);
+            List<NewsOut> dataList = newsService.getNewsList(year,type, visible, title, currentPage, pageSize);
 
             System.out.println(dataList);
-            int total = newsService.getNewsCount(type, visible, title);
+            int total = newsService.getNewsCount(year,type, visible, title);
             map.put("total", total);
             map.put("news", dataList);
             map.put("page", pageSize);

@@ -101,7 +101,7 @@ public class LocationsService {
     }
 
     public int getNewsCount(Byte type, Byte visible, String title) {
-        return newsMapper.getListByTypeANdVisibleCount(type, visible, title);
+        return newsMapper.getListByTypeANdVisibleBackendCount(type, visible, title);
     }
 
     public NewsOut getNews(long id)throws Exception {

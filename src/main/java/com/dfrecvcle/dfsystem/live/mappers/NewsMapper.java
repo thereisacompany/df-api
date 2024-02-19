@@ -14,13 +14,19 @@ public interface NewsMapper {
 
     int updateByPrimaryKeySelective(News record);
 
-    List<NewsOut> getListByTypeAndVisible(@Param("type") Byte type,
+    List<NewsOut> getListByTypeAndVisible(@Param("year") String year,
+                                          @Param("type") Byte type,
                                           @Param("visible") Byte visible,
                                           @Param("title") String title,
                                           @Param("offset") Integer offset,
                                           @Param("rows") Integer rows);
 
-    int getListByTypeANdVisibleCount(@Param("type") Byte type,
+    int getListByTypeANdVisibleCount(@Param("year") String year,
+                                    @Param("type") Byte type,
+                                     @Param("visible") Byte visible,
+                                     @Param("title") String title);
+
+    int getListByTypeANdVisibleBackendCount(@Param("type") Byte type,
                                      @Param("visible") Byte visible,
                                      @Param("title") String title);
 

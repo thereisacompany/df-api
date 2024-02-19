@@ -59,6 +59,7 @@
         ha.category as type ,
         ha.title,
         ha.content,
+        ha.description,
         ha.images,
         ha.publish_date as date,
         hac.name as category,
@@ -84,6 +85,9 @@
         <if test="type != null">
             and ha.category = ${type}
         </if>
+        <if test="year != null">
+            and YEAR(ha.publish_date) = ${year}
+        </if>
 
         <if test="title != null">
             <bind name="bindTitle" value="'%' + title + '%'"/>
@@ -96,16 +100,41 @@
         </if>
     </select>
 
+    <select id="getListByTypeANdVisibleBackendCount" resultType="java.lang.Integer">
+        select count(1)
+        from df_article
+        where 1=1
+        <if test="type != null">
+            and category = ${type}
+        </if>
+        <if test="year != null">
+            and YEAR(publish_date) = ${year}
+        </if>
+        <if test="visible != null">
+            and visible = ${visible}
+        </if>
+
+        and is_delete != 1
+        <if test="title != null">
+            <bind name="bindTitle" value="'%' + title + '%'"/>
+            and title like #{bindTitle}
+        </if>
+    </select>
+
     <select id="getListByTypeANdVisibleCount" resultType="java.lang.Integer">
         select count(1)
         from df_article
         where 1=1
         <if test="type != null">
-            and type = ${type}
+            and category = ${type}
+        </if>
+        <if test="year != null">
+            and YEAR(publish_date) = ${year}
         </if>
         <if test="visible != null">
             and visible = ${visible}
         </if>
+
         and is_delete != 1
         <if test="title != null">
             <bind name="bindTitle" value="'%' + title + '%'"/>

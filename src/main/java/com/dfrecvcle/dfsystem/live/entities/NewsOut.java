@@ -21,6 +21,7 @@ public class NewsOut {
     private String images;
     private String category;
     private Long categoryid;
+    private String description;
 
 //    n.id as id, n.type, n.title, n.content,n.rounddate as date,m.title as category
 }

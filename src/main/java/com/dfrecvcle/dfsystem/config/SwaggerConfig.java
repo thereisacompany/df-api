@@ -41,7 +41,7 @@ public class SwaggerConfig {
 		return new ApiInfoBuilder()
 				.title("大豐環保系統")		// 標題
 				.description("大豐環保系統")// 描述
-				.version("1.0.6")	// 版本
+				.version("1.0.7")	// 版本
 				.license("")	// 設置許可證訊息 Apache LICENSE 2.0
 				.licenseUrl("")	// 設置許可證url位址
 				.contact(new Contact("RD2", "", "")) // 該api人員的聯絡訊息

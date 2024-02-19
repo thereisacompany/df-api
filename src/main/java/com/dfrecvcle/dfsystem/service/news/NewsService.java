@@ -85,12 +85,12 @@ public class NewsService {
         }
     }
 
-    public List<NewsOut> getNewsList(Byte type, Byte visible, String title, Integer currentPage, Integer pageSize) {
-        return newsMapper.getListByTypeAndVisible(type, visible, title, currentPage*pageSize, pageSize);
+    public List<NewsOut> getNewsList(String year,Byte type, Byte visible, String title, Integer currentPage, Integer pageSize) {
+        return newsMapper.getListByTypeAndVisible(year,type, visible, title, currentPage*pageSize, pageSize);
     }
 
-    public int getNewsCount(Byte type, Byte visible, String title) {
-        return newsMapper.getListByTypeANdVisibleCount(type, visible, title);
+    public int getNewsCount(String year,Byte type, Byte visible, String title) {
+        return newsMapper.getListByTypeANdVisibleCount(year,type, visible, title);
     }
 
     public NewsOut getNews(long id)throws Exception {

@@ -34,6 +34,8 @@ public class Article {
     private String images;
     @ApiModelProperty("內容描述")
     private String content;
+    @ApiModelProperty("內容簡述")
+    private String description;
     @ApiModelProperty("相關賽事設定")
     private String gameSettings;
     @ApiModelProperty("熱門關鍵字標籤設定")

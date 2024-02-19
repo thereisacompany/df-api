@@ -17,6 +17,7 @@
         <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
         <result column="images" jdbcType="VARCHAR" property="images" />
         <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
         <result column="game_settings" jdbcType="VARCHAR" property="gameSettings" />
         <result column="keyword_settings" jdbcType="VARCHAR" property="keywordSettings" />
         <result column="article_settings" jdbcType="VARCHAR" property="articleSettings" />
@@ -31,19 +32,19 @@
 
     <sql id="Base_Column_list">
         id, title, code, category, publish_date, sort, is_latest, is_featured, is_top, is_publish, is_enable, is_delete,
-        images, content, game_settings, keyword_settings, article_settings, seo_meta_data, seo_header_data,
+        images, content,description, game_settings, keyword_settings, article_settings, seo_meta_data, seo_header_data,
         browser_count, created_at, created_by, updated_at, updated_by
     </sql>
 
     <insert id="insertArticle" parameterType="com.dfrecvcle.dfsystem.live.entities.Article">
         insert into df_article (id, title, code, category, publish_date, sort, is_latest, is_featured, is_top,
         is_publish, is_enable, is_delete, images,
-        content, game_settings, keyword_settings, article_settings, seo_meta_data, seo_header_data,
+        content,description, game_settings, keyword_settings, article_settings, seo_meta_data, seo_header_data,
         browser_count, created_at, created_by, updated_at, updated_by)
         values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{category,jdbcType=INTEGER},
         #{publishDate,jdbcType=DATE},#{sort,jdbcType=INTEGER}, #{isLatest,jdbcType=TINYINT}, #{isFeatured,jdbcType=TINYINT},
         #{isTop,jdbcType=TINYINT}, #{isPublish,jdbcType=TINYINT}, #{isEnable,jdbcType=TINYINT}, #{isDelete,jdbcType=TINYINT},
-        #{images,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{gameSettings,jdbcType=VARCHAR}, #{keywordSettings,jdbcType=VARCHAR},
+        #{images,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{gameSettings,jdbcType=VARCHAR}, #{keywordSettings,jdbcType=VARCHAR},
         #{articleSettings,jdbcType=VARCHAR}, #{seoMetaData,jdbcType=VARCHAR}, #{seoHeaderData,jdbcType=VARCHAR}, #{browserCount,jdbcType=INTEGER},
         #{createdAt,jdbcType=TIMESTAMP}, #{createdBy, jdbcType=VARCHAR}, #{updatedAt,jdbcType=TIMESTAMP}, #{updatedBy, jdbcType=VARCHAR})
     </insert>
@@ -87,9 +88,13 @@
             <if test="images != null and !images.isEmpty()">
                 images = #{images,jdbcType=VARCHAR},
             </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
             <if test="content != null">
                 content = #{content,jdbcType=VARCHAR},
             </if>
+
             <if test="gameSettings != null">
                 game_settings = #{gameSettings,jdbcType=VARCHAR},
             </if>
