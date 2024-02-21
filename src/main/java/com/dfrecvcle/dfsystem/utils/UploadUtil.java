@@ -75,7 +75,7 @@ public class UploadUtil {
 //            dbPath =  request.getContextPath() + "/" + uploader + "/" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "/" + currentFilename;
             dbPath = "http://34.81.192.108/images/" + uploader + "/" + currentFilename;
 //            dbPath = fileProperties.getUrlLocation()+"/Server/images/"+ uploader + "/" + currentFilename;
-
+            System.out.println("URL："+dbPath);
             return true;
         }else{
             return false;

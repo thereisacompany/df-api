@@ -10,6 +10,8 @@ public class HistoryBackend {
     private String title;
     @ApiModelProperty("代稱設定")
     private String code;
+    @ApiModelProperty("最新消息連結")
+    private String url;
     @ApiModelProperty("文章分類")
     private Integer category;
     @ApiModelProperty("文章名稱")

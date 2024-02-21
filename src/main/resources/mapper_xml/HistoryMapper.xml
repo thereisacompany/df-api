@@ -104,23 +104,24 @@
             <bind name="bindTitle" value="'%' + title + '%'"/>
             and (ha.title like #{bindTitle})
         </if>
+        and ha.is_delete!=1
         order by ha.id desc
     </select>
 
 
-    <select id="getListMainHistory" resultMap="RestDataMainHistory">
-        select
-        id,
-        name,
-        images
-        from df_history_category
-        where 1=1
-        <if test="filter != null">
-            and id = ${filter}
-        </if>
-
-        order by id desc
-    </select>
+        <select id="getListMainHistory" resultMap="RestDataMainHistory">
+            select
+            id,
+            name,
+            images
+            from df_history_category
+            where 1=1
+            <if test="filter != null">
+                and id = ${filter}
+            </if>
+            and is_delete !=1
+            order by id desc
+        </select>
 
 
 

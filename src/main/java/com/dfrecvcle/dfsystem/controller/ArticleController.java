@@ -166,6 +166,7 @@ public class ArticleController {
         String fileName = "";
         if (uploadUtil.doUpload(file, request, "uploadImg")) {
             fileName = uploadUtil.getUploadFile();
+            System.out.println(fileName);
         } else {
             fileName = "file";
         }

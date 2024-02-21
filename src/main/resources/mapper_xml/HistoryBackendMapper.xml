@@ -5,6 +5,7 @@
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="title" jdbcType="VARCHAR" property="title" />
         <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
         <result column="category" jdbcType="INTEGER" property="category" />
         <result column="name" jdbcType="VARCHAR" property="categoryName" />
         <result column="publish_date" jdbcType="DATE" property="publishDate" />
@@ -30,17 +31,17 @@
     </resultMap>
 
     <sql id="Base_Column_list">
-        id, title, code, category, publish_date, sort, is_latest, is_featured, is_top, is_publish, is_enable, is_delete,
+        id, title, code,url, category, publish_date, sort, is_latest, is_featured, is_top, is_publish, is_enable, is_delete,
         images, content, game_settings, keyword_settings, article_settings, seo_meta_data, seo_header_data,
         browser_count, created_at, created_by, updated_at, updated_by
     </sql>
 
     <insert id="insertArticle" parameterType="com.dfrecvcle.dfsystem.live.entities.HistoryBackend">
-        insert into df_history (id, title, code, category, publish_date, sort, is_latest, is_featured, is_top,
+        insert into df_history (id, title, code,url, category, publish_date, sort, is_latest, is_featured, is_top,
         is_publish, is_enable, is_delete, images,
         content, game_settings, keyword_settings, article_settings, seo_meta_data, seo_header_data,
         browser_count, created_at, created_by, updated_at, updated_by)
-        values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{category,jdbcType=INTEGER},
+        values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{category,jdbcType=INTEGER},
         #{publishDate,jdbcType=DATE},#{sort,jdbcType=INTEGER}, #{isLatest,jdbcType=TINYINT}, #{isFeatured,jdbcType=TINYINT},
         #{isTop,jdbcType=TINYINT}, #{isPublish,jdbcType=TINYINT}, #{isEnable,jdbcType=TINYINT}, #{isDelete,jdbcType=TINYINT},
         #{images,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{gameSettings,jdbcType=VARCHAR}, #{keywordSettings,jdbcType=VARCHAR},
@@ -56,6 +57,9 @@
             </if>
             <if test="code != null">
                 code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
             </if>
             <if test="category != null">
                 category = #{category,jdbcType=INTEGER},
