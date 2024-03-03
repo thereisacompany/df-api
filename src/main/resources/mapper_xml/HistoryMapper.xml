@@ -105,7 +105,8 @@
             and (ha.title like #{bindTitle})
         </if>
         and ha.is_delete!=1
-        order by ha.id desc
+        and ha.is_publish=1
+        order by ha.publish_date desc
     </select>
 
 

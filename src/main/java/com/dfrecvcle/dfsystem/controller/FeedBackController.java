@@ -15,6 +15,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -35,6 +37,10 @@ public class FeedBackController {
 
     @Resource
     private FeedbackService feedbackService;
+
+
+
+
 
 //    @Resource
 //    private LogService logService;
@@ -96,6 +102,8 @@ public class FeedBackController {
         DataSourceContextHolder.setDBType("live");
         Feedback feedback = JSONObject.parseObject(json.toJSONString(), Feedback.class);
         feedbackService.insert(feedback, request);
+        //Mail 送出通知者
+        feedbackService.sendTestEmail(feedback, request);
 
 //        logService.insertLog("意見回饋",
 //                new StringBuffer(BusinessConstants.LOG_OPERATION_TYPE_ADD).append(feedback.getTitle()).toString(), userId, request);

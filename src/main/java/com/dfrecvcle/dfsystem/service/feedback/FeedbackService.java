@@ -11,17 +11,37 @@ import com.dfrecvcle.dfsystem.service.log.LogService;
 import com.dfrecvcle.dfsystem.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.TemplateEngine;
 
 import javax.annotation.Resource;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
+
+
 
 @Service
 public class FeedbackService {
+
+//    @Autowired
+//    public FeedbackService(JavaMailSender javaMailSender, TemplateEngine templateEngine) {
+//        this.javaMailSender = javaMailSender;
+//        this.templateEngine = templateEngine;
+//    }
 
     private Logger logger = LoggerFactory.getLogger(FeedbackService.class);
 
@@ -33,6 +53,12 @@ public class FeedbackService {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private JavaMailSender javaMailSender;
+
+    @Resource
+    private TemplateEngine templateEngine;
 
     @Transactional(value = "transactionManager", rollbackFor = Exception.class)
     public void insert(Feedback feedback, HttpServletRequest request) {
@@ -106,5 +132,52 @@ public class FeedbackService {
             HfException.readFail(logger, e);
         }
         return result;
+    }
+    //發送Email
+    public void sendTestEmail(Feedback feedback, HttpServletRequest request) throws MessagingException {
+//        SimpleMailMessage message = new SimpleMailMessage();
+//        message.setTo("service@df-recycle.com","kuoleo@gmail.com","punkymk@gmail.com"); //設置收件人信箱
+//        message.setFrom("service@df-recycle.com");
+//        message.setSubject("Test Email"); //設置信箱主題
+//        message.setText("This is a test email."); //設置信箱內容
+//        javaMailSender.send(message); //發送郵件
+
+        List<CityEmail> toAddresses = Arrays.asList(
+                new CityEmail("service@df-recycle.com"),
+                new CityEmail(feedback.getMail())
+//                new CityEmail("punkymk@gmail.com")
+        );
+//        String[] toAddresses = {"service@df-recycle.com", "kuoleo@gmail.com", "punkymk@gmail.com"};
+
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+//        helper.setTo("service@df-recycle.com");
+
+        helper.setFrom("service@df-recycle.com");
+
+        for (CityEmail cityEmail : toAddresses){
+            message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(cityEmail.getEmailAddress(), false));
+        }
+
+        helper.setSubject("大豐環保官網-聯絡諮詢");
+
+        // 創建 Thymeleaf context
+        Context context = new Context();
+        context.setVariable("userName", feedback.getUsername());
+        context.setVariable("date", feedback.getCreatedAt());
+        context.setVariable("user", feedback.getUsername());
+        context.setVariable("email", feedback.getMail());
+        context.setVariable("tel", feedback.getPhone());
+        context.setVariable("address", feedback.getAddress());
+        context.setVariable("subject", feedback.getQuestion());
+        context.setVariable("message", feedback.getContent());
+        // Process the template
+        String emailContent = templateEngine.process("email-template", context);
+
+        helper.setText(emailContent, true);
+
+        javaMailSender.send(message);
     }
 }

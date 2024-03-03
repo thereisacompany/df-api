@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-TW" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>大豐環保官網聯絡諮詢</title>
+</head>
+<body>
+<h1>你好，<span th:text="${userName}">User</span>！</h1>
+<h3>您於 <span th:text="${date}">date</span> 在大豐網站上留言:</h3>
+<hr>
+<p>姓名 <span th:text="${user}">user</span> </p>
+<p>E-mail <span th:text="${email}">email</span></p>
+<p>聯絡電話 <span th:text="${tel}">tel</span></p>
+<p>地址 <span th:text="${address}">address</span></p>
+<p>詢問類型 <span th:text="${subject}">subject</span></p>
+<hr>
+<p>需求說明 <span th:text="${message}">message</span></p>
+</body>
+</html>

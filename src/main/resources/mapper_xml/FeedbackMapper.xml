@@ -5,7 +5,10 @@
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="title" jdbcType="VARCHAR" property="title" />
         <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
         <result column="mail" jdbcType="VARCHAR" property="mail" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="question" jdbcType="VARCHAR" property="question" />
         <result column="response" jdbcType="VARCHAR" property="response" />
         <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
         <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
@@ -14,7 +17,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, title, content, response, mail, created_at, created_by, updated_at, updated_by
+        id, title, content,username,address, response,phone,question, mail, created_at, created_by, updated_at, updated_by
     </sql>
 
     <insert id="insertFeedback" parameterType="com.dfrecvcle.dfsystem.live.entities.Feedback">
