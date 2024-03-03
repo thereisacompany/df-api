@@ -55,7 +55,7 @@
             and name like #{bindTitle}
         </if>
         and is_delete != 1
-        order by id desc
+        order by id asc
         <if test="offset != null and rows != null">
             limit #{offset},#{rows}
         </if>

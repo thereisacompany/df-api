@@ -94,7 +94,7 @@
             and ha.title like #{bindTitle}
         </if>
         and ha.is_delete != 1
-        order by ha.id desc
+        order by ha.publish_date desc
         <if test="offset != null and rows != null and rows !=0">
             limit #{offset},#{rows}
         </if>
