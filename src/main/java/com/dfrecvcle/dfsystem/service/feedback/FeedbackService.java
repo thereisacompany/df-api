@@ -143,8 +143,8 @@ public class FeedbackService {
 //        javaMailSender.send(message); //發送郵件
 
         List<CityEmail> toAddresses = Arrays.asList(
-                new CityEmail("service@df-recycle.com"),
-                new CityEmail(feedback.getMail())
+                new CityEmail("service@df-recycle.com")
+//                new CityEmail(feedback.getMail())
 //                new CityEmail("punkymk@gmail.com")
         );
 //        String[] toAddresses = {"service@df-recycle.com", "kuoleo@gmail.com", "punkymk@gmail.com"};

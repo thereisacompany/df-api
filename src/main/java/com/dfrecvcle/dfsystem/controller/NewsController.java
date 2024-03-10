@@ -178,13 +178,14 @@ public class NewsController {
 
     @GetMapping(value = "/{id}")
     @ApiOperation(value = "取得指定最新消息")
-    public BaseResponseInfo getNews(HttpServletResponse response, @PathVariable("id") long id) {
+    public BaseResponseInfo getNews(HttpServletResponse response, @PathVariable("id") long id,
+                                    @RequestParam(value = "type", required = false) Byte type) {
         BaseResponseInfo res = new BaseResponseInfo();
 
         try {
             DataSourceContextHolder.setDBType("live");
             Map<String, Object> data = new HashMap<>();
-            data.put("data", newsService.getNews(id));
+            data.put("data", newsService.getNews(id,type));
             res.code = 200;
             res.result = data.get("data");
 //            res.result = data;

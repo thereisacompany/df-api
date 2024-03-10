@@ -32,7 +32,7 @@ public interface NewsMapper {
 
     int selectSameTitleCount(@Param("title") String title);
 
-    NewsOut selectByPrimaryKey(Long id);
+    NewsOut selectByPrimaryKey(@Param("id") Long id, @Param("type") Byte type);
 
     void deleteByPrimaryKey(Long id);
 }

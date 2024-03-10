@@ -66,14 +66,30 @@
         hac.id as categoryid,
         YEAR(ha.publish_date) AS year,
         (
-        SELECT MAX(id)
+        SELECT id
         FROM df_article
-        WHERE id &lt; ha.id AND CASE WHEN is_delete = 1 THEN 0 ELSE 1 END = 1
+        WHERE (publish_date &lt; ha.publish_date OR (publish_date = ha.publish_date AND id &lt; ha.id))
+        AND is_delete = 0
+        AND is_publish = 1
+        <if test="type != null">
+            and category = ${type}
+        </if>
+
+        ORDER BY publish_date DESC, id DESC
+        LIMIT 1
         ) AS previousid,
         (
-        SELECT MIN(id)
+        SELECT id
         FROM df_article
-        WHERE id > ha.id AND CASE WHEN is_delete = 1 THEN 0 ELSE 1 END = 1
+        WHERE (publish_date > ha.publish_date OR (publish_date = ha.publish_date AND id > ha.id))
+        AND is_delete = 0
+        AND is_publish = 1
+        <if test="type != null">
+            and category = ${type}
+        </if>
+
+        ORDER BY publish_date ASC, id ASC
+        LIMIT 1
         ) AS nextid
 
         FROM
@@ -94,6 +110,7 @@
             and ha.title like #{bindTitle}
         </if>
         and ha.is_delete != 1
+        and ha.is_publish=1
         order by ha.publish_date desc
         <if test="offset != null and rows != null and rows !=0">
             limit #{offset},#{rows}
@@ -136,6 +153,7 @@
         </if>
 
         and is_delete != 1
+        and is_publish=1
         <if test="title != null">
             <bind name="bindTitle" value="'%' + title + '%'"/>
             and title like #{bindTitle}
@@ -160,25 +178,47 @@
              hac.id as categoryid,
           YEAR(ha.publish_date) AS year,
         (
-        SELECT MAX(id)
+        SELECT id
         FROM df_article
-        WHERE id &lt; ha.id AND CASE WHEN is_delete = 1 THEN 0 ELSE 1 END = 1
-        ) AS previousid,
+        WHERE (publish_date &lt; ha.publish_date OR (publish_date = ha.publish_date AND id &lt; ha.id))
+        AND is_delete = 0
+        AND is_publish = 1
+        <if test="type != null">
+            and category = ${type}
+        </if>
+
+        ORDER BY publish_date DESC, id DESC
+        LIMIT 1
+    ) AS previousid,
         (
-        SELECT MIN(id)
+        SELECT id
         FROM df_article
-        WHERE id > ha.id AND CASE WHEN is_delete = 1 THEN 0 ELSE 1 END = 1
-        ) AS nextid
+        WHERE (publish_date > ha.publish_date OR (publish_date = ha.publish_date AND id > ha.id))
+        AND is_delete = 0
+        AND is_publish = 1
+        <if test="type != null">
+            and category = ${type}
+        </if>
+
+        ORDER BY publish_date ASC, id ASC
+        LIMIT 1
+    ) AS nextid
 
         FROM
             df_article ha
             INNER JOIN
             df_article_category hac ON ha.category = hac.id
-        where ha.id = #{id,jdbcType=BIGINT}
+        where 1=1
+        and ha.id = #{id,jdbcType=BIGINT}
+        and ha.is_delete = 0
+        and ha.is_publish=1
+        <if test="type != null">
+            and ha.category = ${type}
+        </if>
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete from df_news
+        delete from df_article
         <where>
             id = #{id,jdbcType=BIGINT}
         </where>

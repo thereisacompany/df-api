@@ -93,10 +93,13 @@ public class NewsService {
         return newsMapper.getListByTypeANdVisibleCount(year,type, visible, title);
     }
 
-    public NewsOut getNews(long id)throws Exception {
+    public NewsOut getNews(long id,Byte type)throws Exception {
         NewsOut result = null;
         try{
-            result = newsMapper.selectByPrimaryKey(id);
+            System.out.println("近來");
+            System.out.println(id);
+            result = newsMapper.selectByPrimaryKey(id,type);
+            System.out.println(result);
         }catch(Exception e){
             HfException.readFail(logger, e);
         }

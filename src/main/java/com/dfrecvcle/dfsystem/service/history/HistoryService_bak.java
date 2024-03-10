@@ -111,15 +111,15 @@ public class HistoryService_bak {
         return newsMapper.getListByTypeANdVisibleBackendCount(type, visible, title);
     }
 
-    public NewsOut getNews(long id)throws Exception {
-        NewsOut result = null;
-        try{
-            result = newsMapper.selectByPrimaryKey(id);
-        }catch(Exception e){
-            HfException.readFail(logger, e);
-        }
-        return result;
-    }
+//    public NewsOut getNews(long id)throws Exception {
+//        NewsOut result = null;
+//        try{
+//            result = newsMapper.selectByPrimaryKey(id);
+//        }catch(Exception e){
+//            HfException.readFail(logger, e);
+//        }
+//        return result;
+//    }
 
     @Transactional(value = "transactionManager", rollbackFor = Exception.class)
     public void deleteNews(long id, HttpServletRequest request) {
