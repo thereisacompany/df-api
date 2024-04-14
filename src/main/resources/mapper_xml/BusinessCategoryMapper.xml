@@ -54,7 +54,7 @@
     </update>
 
     <select id="getListByExample" resultMap="CountBaseResultMap">
-        select id,name,visible,created_at
+        select id,name,visible,created_at, created_by, updated_at, updated_by
         from df_business_types
         where 1= 1
         <if test="keyword != null and !keyword.isEmpty()">
